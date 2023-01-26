@@ -42,6 +42,9 @@
       "@microservice-stack-shop-demo/api/shipping/shipping": [
         "libs/api/shipping/shipping/src/index.ts"
       ],
+      "@microservice-stack-shop-demo/api/shipping/shipping-address": [
+        "libs/api/shipping/shipping-address/src/index.ts"
+      ],
       "@microservice-stack-shop-demo/api/utils/authentication": [
         "libs/api/utils/authentication/src/index.ts"
       ]

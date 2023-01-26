@@ -56,14 +56,16 @@ export class OrderService {
 
   public async updateOrderStatus(
     orderId: string,
-    orderStatus: OrderStatus
+    status: OrderStatus,
+    failureReason?: string
   ): Promise<void> {
     await this.orderRepository.update(
       {
         id: orderId,
       },
       {
-        status: orderStatus,
+        status,
+        failureReason,
       }
     );
   }

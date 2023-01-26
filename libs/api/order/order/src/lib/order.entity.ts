@@ -20,4 +20,9 @@ export class OrderEntity {
     default: OrderStatus.CREATED,
   })
   status: OrderStatus;
+
+  @Column('varchar', {
+    nullable: true,
+  })
+  failureReason?: string;
 }
