@@ -1,0 +1,74 @@
+{
+  "name": "api-customer",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/customer/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/api/customer",
+        "main": "apps/api/customer/src/main.ts",
+        "tsConfig": "apps/api/customer/tsconfig.app.json",
+        "assets": [
+          "apps/api/customer/src/assets"
+        ],
+        "webpackConfig": "apps/api/customer/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "api-customer:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "api-customer:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/api/customer/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/api/customer/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "generate-migrations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build api-customer && node dist/apps/api-customer/main generate-migrations"
+      }
+    }
+  },
+  "tags": [
+    "scope:api:lib:util",
+    "scope:api:lib:customer"
+  ]
+}
