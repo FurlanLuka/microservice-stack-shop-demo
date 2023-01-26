@@ -24,6 +24,15 @@
       "@microservice-stack-shop-demo/api/customer/data-transfer-objects": [
         "libs/api/customer/data-transfer-objects/src/index.ts"
       ],
+      "@microservice-stack-shop-demo/api/order/constants": [
+        "libs/api/order/constants/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/order/data-transfer-objects": [
+        "libs/api/order/data-transfer-objects/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/order/order": [
+        "libs/api/order/order/src/index.ts"
+      ],
       "@microservice-stack-shop-demo/api/utils/authentication": [
         "libs/api/utils/authentication/src/index.ts"
       ]

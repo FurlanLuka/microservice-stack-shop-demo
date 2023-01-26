@@ -1,0 +1,13 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+WORKDIR /service
+
+COPY dist/apps/api/order/ /service/
+COPY apps/api/order/.env /
+
+USER node
+
+WORKDIR /
+
+CMD ["/bin/sh"]
