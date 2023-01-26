@@ -1,3 +1,9 @@
+import { Event } from '@microservice-stack/nest-rabbitmq';
+import {
+  OrderPaymentReservedEventPayload,
+  OrderPaymentFailedEventPayload,
+} from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
+
 export const SERVICE_NAME = 'customer';
 
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -11,3 +17,8 @@ export enum ConfigVariables {
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
 }
+
+export const ORDER_PAYMENT_RESERVED_EVENT =
+  new Event<OrderPaymentReservedEventPayload>('order.payment.reserved', 1);
+export const ORDER_PAYMENT_FAILED_EVENT =
+  new Event<OrderPaymentFailedEventPayload>('order.payment.failed', 1);

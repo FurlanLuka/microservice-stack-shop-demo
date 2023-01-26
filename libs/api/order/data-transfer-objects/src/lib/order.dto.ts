@@ -5,3 +5,9 @@ export class CreateOrderDto {
   @IsPositive()
   orderPrice: number;
 }
+
+export class AddCustomerCreditsDto {
+  @IsNumber()
+  @IsPositive()
+  amount: number;
+}

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import {
   CreateOrderDto,
   CreateOrderResponse,
+  OrderStatus,
 } from '@microservice-stack-shop-demo/api/order/data-transfer-objects';
 import { ORDER_CREATED_EVENT } from '@microservice-stack-shop-demo/api/order/constants';
 import { RabbitmqService } from '@microservice-stack/nest-rabbitmq';
@@ -17,13 +18,18 @@ export class OrderService {
     private rabbitmqService: RabbitmqService
   ) {}
 
-  public async createOrder(body: CreateOrderDto): Promise<CreateOrderResponse> {
+  public async createOrder(
+    customerId: string,
+    body: CreateOrderDto
+  ): Promise<CreateOrderResponse> {
     const order: OrderEntity = await this.orderRepository.save({
+      customerId,
       price: body.orderPrice,
     });
 
     this.rabbitmqService.publishEvent(ORDER_CREATED_EVENT, {
-      id: order.id,
+      orderId: order.id,
+      customerId,
       price: order.price,
     });
 
@@ -32,8 +38,12 @@ export class OrderService {
     };
   }
 
-  public async getOrder(orderId: string): Promise<OrderEntity> {
+  public async getOrder(
+    customerId: string,
+    orderId: string
+  ): Promise<OrderEntity> {
     const order: OrderEntity | null = await this.orderRepository.findOneBy({
+      customerId,
       id: orderId,
     });
 
@@ -42,5 +52,19 @@ export class OrderService {
     }
 
     return order;
+  }
+
+  public async updateOrderStatus(
+    orderId: string,
+    orderStatus: OrderStatus
+  ): Promise<void> {
+    await this.orderRepository.update(
+      {
+        id: orderId,
+      },
+      {
+        status: orderStatus,
+      }
+    );
   }
 }
