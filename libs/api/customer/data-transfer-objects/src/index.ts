@@ -1,1 +1,2 @@
-export * from './lib/example.dto';
+export * from './lib/customer.dto';
+export * from './lib/customer.interfaces';
