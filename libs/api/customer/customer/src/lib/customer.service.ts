@@ -142,6 +142,7 @@ export class CustomerService {
     if (payload.price > customer.availableCredits) {
       return this.rabbitmqService.publishEvent(ORDER_PAYMENT_FAILED_EVENT, {
         orderId: payload.orderId,
+        customerId: payload.customerId
       });
     }
 
@@ -158,6 +159,7 @@ export class CustomerService {
 
     this.rabbitmqService.publishEvent(ORDER_PAYMENT_RESERVED_EVENT, {
       orderId: payload.orderId,
+      customerId: payload.customerId
     });
   }
 }

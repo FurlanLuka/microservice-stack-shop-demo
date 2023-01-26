@@ -22,6 +22,14 @@ import {
   ORDER_PAYMENT_RESERVED_EVENT,
 } from '@microservice-stack-shop-demo/api/customer/constants';
 import { OrderPaymentFailedEventPayload } from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
+import {
+  ORDER_SHIPMENT_FAILED_EVENT,
+  ORDER_SHIPMENT_SUCCEEDED_EVENT,
+} from '@microservice-stack-shop-demo/api/shipping/constants';
+import {
+  OrderShipmentFailedEventPayload,
+  OrderShipmentSucceededEventPayload,
+} from '@microservice-stack-shop-demo/api/shipping/data-transfer-objects';
 
 @Controller('v1/order')
 export class OrderController {
@@ -56,7 +64,11 @@ export class OrderQueueController {
   async orderPaymentFailedEventHandler(
     payload: OrderPaymentFailedEventPayload
   ): Promise<void> {
-    this.orderService.updateOrderStatus(payload.orderId, OrderStatus.FAILED);
+    this.orderService.updateOrderStatus(
+      payload.orderId,
+      OrderStatus.FAILED,
+      'Not enough credits'
+    );
   }
 
   @Subscribe(ORDER_PAYMENT_RESERVED_EVENT, OrderQueueController.QUEUE_NAME, {})
@@ -67,5 +79,27 @@ export class OrderQueueController {
       payload.orderId,
       OrderStatus.PAYMENT_RESERVED
     );
+  }
+
+  @Subscribe(ORDER_SHIPMENT_FAILED_EVENT, OrderQueueController.QUEUE_NAME, {})
+  async orderShipmentFailedEventHandler(
+    payload: OrderShipmentFailedEventPayload
+  ): Promise<void> {
+    this.orderService.updateOrderStatus(
+      payload.orderId,
+      OrderStatus.FAILED,
+      'Shipping address not found'
+    );
+  }
+
+  @Subscribe(
+    ORDER_SHIPMENT_SUCCEEDED_EVENT,
+    OrderQueueController.QUEUE_NAME,
+    {}
+  )
+  async orderShipmentSucceededEventHandler(
+    payload: OrderShipmentSucceededEventPayload
+  ): Promise<void> {
+    this.orderService.updateOrderStatus(payload.orderId, OrderStatus.SHIPPED);
   }
 }

@@ -9,8 +9,10 @@ export interface GetCustomerUsernameResponse {
 
 export interface OrderPaymentReservedEventPayload {
   orderId: string;
+  customerId: string;
 }
 
 export interface OrderPaymentFailedEventPayload {
   orderId: string;
+  customerId: string;
 }
