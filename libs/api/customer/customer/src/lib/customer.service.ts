@@ -7,7 +7,7 @@ import {
   CreateCustomerDto,
   AuthenticateCustomerDto,
   CustomerTokenData,
-  GetCustomerUsernameResponse,
+  GetCustomerResponse,
 } from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerEntity } from './customer.entity';
@@ -25,6 +25,10 @@ import {
 } from '@microservice-stack-shop-demo/api/order/data-transfer-objects';
 import { RabbitmqService } from '@microservice-stack/nest-rabbitmq';
 import { ReservedCreditsEntity } from './reserved-credits.entity';
+import {
+  OrderShipmentFailedEventPayload,
+  OrderShipmentSucceededEventPayload,
+} from '@microservice-stack-shop-demo/api/shipping/data-transfer-objects';
 
 @Injectable()
 export class CustomerService {
@@ -103,9 +107,7 @@ export class CustomerService {
     };
   }
 
-  public async getCustomerUsername(
-    customerId: string
-  ): Promise<GetCustomerUsernameResponse> {
+  public async getCustomer(customerId: string): Promise<GetCustomerResponse> {
     const customer: CustomerEntity | null =
       await this.customerRepository.findOneBy({
         id: customerId,
@@ -117,6 +119,7 @@ export class CustomerService {
 
     return {
       username: customer.username,
+      creditAmount: customer.availableCredits,
     };
   }
 
@@ -142,7 +145,7 @@ export class CustomerService {
     if (payload.price > customer.availableCredits) {
       return this.rabbitmqService.publishEvent(ORDER_PAYMENT_FAILED_EVENT, {
         orderId: payload.orderId,
-        customerId: payload.customerId
+        customerId: payload.customerId,
       });
     }
 
@@ -159,7 +162,47 @@ export class CustomerService {
 
     this.rabbitmqService.publishEvent(ORDER_PAYMENT_RESERVED_EVENT, {
       orderId: payload.orderId,
-      customerId: payload.customerId
+      customerId: payload.customerId,
+    });
+  }
+
+  public async returnReservedCredits(
+    payload: OrderShipmentFailedEventPayload
+  ): Promise<void> {
+    const customer: CustomerEntity | null =
+      await this.customerRepository.findOneBy({
+        id: payload.customerId,
+      });
+
+    if (customer === null) {
+      return;
+    }
+
+    const reservedCredits: ReservedCreditsEntity | null =
+      await this.reservedCreditsRepository.findOneBy({
+        orderId: payload.orderId,
+      });
+
+    if (reservedCredits === null) {
+      return;
+    }
+
+    await this.customerRepository.increment(
+      { id: payload.customerId },
+      'availableCredits',
+      reservedCredits.reservedAmount
+    );
+
+    await this.reservedCreditsRepository.delete({
+      orderId: payload.orderId,
+    });
+  }
+
+  public async applyReservedCredits(
+    payload: OrderShipmentSucceededEventPayload
+  ): Promise<void> {
+    await this.reservedCreditsRepository.delete({
+      orderId: payload.orderId,
     });
   }
 }
