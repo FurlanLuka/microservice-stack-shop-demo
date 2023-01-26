@@ -14,7 +14,17 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@microservice-stack-shop-demo/api/customer/constants": [
+        "libs/api/customer/constants/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/customer/customer": [
+        "libs/api/customer/customer/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/customer/data-transfer-objects": [
+        "libs/api/customer/data-transfer-objects/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
