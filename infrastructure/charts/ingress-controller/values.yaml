@@ -1,0 +1,21 @@
+## Environment name
+environment: "local"
+
+productionConfig:
+  ## Api domain name used in production (api.example.com)
+  domain: ''
+  ## SSL certificate arn
+  sslCertificateArn: ''
+
+websocketConfig:
+  ## Is websocket enabled
+  enabled: false
+  ## Websocket domain name (ws.example.com)
+  domain: ''
+  ## Name of the service that handles websocket connections
+  websocketServiceName: ''
+
+# List of endpoints mapped to the service name
+endpoints:
+  - serviceName: ''
+    path: ''
