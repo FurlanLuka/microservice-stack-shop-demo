@@ -63,7 +63,7 @@
     "generate-migrations": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build api-customer && node dist/apps/api-customer/main generate-migrations"
+        "command": "nx run api-customer:build && node dist/apps/api/customer/main generate-migrations"
       }
     }
   },

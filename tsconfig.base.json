@@ -23,6 +23,9 @@
       ],
       "@microservice-stack-shop-demo/api/customer/data-transfer-objects": [
         "libs/api/customer/data-transfer-objects/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/utils/authentication": [
+        "libs/api/utils/authentication/src/index.ts"
       ]
     }
   },
