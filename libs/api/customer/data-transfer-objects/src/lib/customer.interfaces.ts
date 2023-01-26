@@ -3,8 +3,9 @@ export interface CustomerTokenData {
   expiry: number;
 }
 
-export interface GetCustomerUsernameResponse {
+export interface GetCustomerResponse {
   username: string;
+  creditAmount: number;
 }
 
 export interface OrderPaymentReservedEventPayload {

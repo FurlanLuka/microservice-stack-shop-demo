@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import {
   CreateCustomerDto,
   CustomerTokenData,
-  GetCustomerUsernameResponse,
+  GetCustomerResponse,
 } from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
 import { CustomerService } from './customer.service';
 import { UseGuards } from '@nestjs/common';
@@ -14,6 +14,14 @@ import {
   AddCustomerCreditsDto,
   OrderCreatedEventPayload,
 } from '@microservice-stack-shop-demo/api/order/data-transfer-objects';
+import {
+  ORDER_SHIPMENT_FAILED_EVENT,
+  ORDER_SHIPMENT_SUCCEEDED_EVENT,
+} from '@microservice-stack-shop-demo/api/shipping/constants';
+import {
+  OrderShipmentFailedEventPayload,
+  OrderShipmentSucceededEventPayload,
+} from '@microservice-stack-shop-demo/api/shipping/data-transfer-objects';
 
 @Controller('v1/customer')
 export class CustomerController {
@@ -35,10 +43,8 @@ export class CustomerController {
 
   @Get('me')
   @UseGuards(AuthenticationGuard)
-  public async getCustomerUsername(
-    @Req() req
-  ): Promise<GetCustomerUsernameResponse> {
-    return this.customerService.getCustomerUsername(req.user.sub);
+  public async getCustomer(@Req() req): Promise<GetCustomerResponse> {
+    return this.customerService.getCustomer(req.user.sub);
   }
 
   @Post('credits')
@@ -62,5 +68,27 @@ export class CustomerQueueController {
     payload: OrderCreatedEventPayload
   ): Promise<void> {
     return this.customerService.reserveOrderPayment(payload);
+  }
+
+  @Subscribe(
+    ORDER_SHIPMENT_FAILED_EVENT,
+    CustomerQueueController.QUEUE_NAME,
+    {}
+  )
+  async orderShipmentFailedEventHandler(
+    payload: OrderShipmentFailedEventPayload
+  ): Promise<void> {
+    this.customerService.returnReservedCredits(payload);
+  }
+
+  @Subscribe(
+    ORDER_SHIPMENT_SUCCEEDED_EVENT,
+    CustomerQueueController.QUEUE_NAME,
+    {}
+  )
+  async orderShipmentSucceededEventHandler(
+    payload: OrderShipmentSucceededEventPayload
+  ): Promise<void> {
+    this.customerService.applyReservedCredits(payload);
   }
 }
