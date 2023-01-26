@@ -33,6 +33,15 @@
       "@microservice-stack-shop-demo/api/order/order": [
         "libs/api/order/order/src/index.ts"
       ],
+      "@microservice-stack-shop-demo/api/shipping/constants": [
+        "libs/api/shipping/constants/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/shipping/data-transfer-objects": [
+        "libs/api/shipping/data-transfer-objects/src/index.ts"
+      ],
+      "@microservice-stack-shop-demo/api/shipping/shipping": [
+        "libs/api/shipping/shipping/src/index.ts"
+      ],
       "@microservice-stack-shop-demo/api/utils/authentication": [
         "libs/api/utils/authentication/src/index.ts"
       ]
