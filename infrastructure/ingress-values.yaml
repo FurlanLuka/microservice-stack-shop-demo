@@ -2,3 +2,5 @@
 endpoints:
   - serviceName: customer-service
     path: /v1/customer
+  - serviceName: order-service
+    path: /v1/order
