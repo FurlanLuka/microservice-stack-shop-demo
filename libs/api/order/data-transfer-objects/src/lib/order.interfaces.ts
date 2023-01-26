@@ -1,5 +1,6 @@
 export enum OrderStatus {
   CREATED = 'CREATED',
+  PAYMENT_RESERVED = 'PAYMENT_RESERVED',
   PAID = 'PAID',
   SHIPPED = 'SHIPPED',
   FAILED = 'FAILED',
@@ -10,6 +11,7 @@ export interface CreateOrderResponse {
 }
 
 export interface OrderCreatedEventPayload {
-  id: string;
+  orderId: string;
+  customerId: string;
   price: number;
 }

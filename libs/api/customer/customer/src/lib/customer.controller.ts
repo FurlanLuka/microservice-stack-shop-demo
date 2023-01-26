@@ -7,6 +7,13 @@ import {
 import { CustomerService } from './customer.service';
 import { UseGuards } from '@nestjs/common';
 import { AuthenticationGuard } from '@microservice-stack-shop-demo/api/utils/authentication';
+import { SERVICE_NAME } from '@microservice-stack-shop-demo/api/customer/constants';
+import { Subscribe } from '@microservice-stack/nest-rabbitmq';
+import { ORDER_CREATED_EVENT } from '@microservice-stack-shop-demo/api/order/constants';
+import {
+  AddCustomerCreditsDto,
+  OrderCreatedEventPayload,
+} from '@microservice-stack-shop-demo/api/order/data-transfer-objects';
 
 @Controller('v1/customer')
 export class CustomerController {
@@ -32,5 +39,28 @@ export class CustomerController {
     @Req() req
   ): Promise<GetCustomerUsernameResponse> {
     return this.customerService.getCustomerUsername(req.user.sub);
+  }
+
+  @Post('credits')
+  @UseGuards(AuthenticationGuard)
+  public async addCustomerCredits(
+    @Req() req,
+    @Body() body: AddCustomerCreditsDto
+  ): Promise<void> {
+    return this.customerService.addCustomerCredits(req.user.sub, body);
+  }
+}
+
+@Controller()
+export class CustomerQueueController {
+  static QUEUE_NAME = `${SERVICE_NAME}-queue`;
+
+  constructor(private customerService: CustomerService) {}
+
+  @Subscribe(ORDER_CREATED_EVENT, CustomerQueueController.QUEUE_NAME, {})
+  async orderCreatedEventHandler(
+    payload: OrderCreatedEventPayload
+  ): Promise<void> {
+    return this.customerService.reserveOrderPayment(payload);
   }
 }

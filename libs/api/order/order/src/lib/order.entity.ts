@@ -8,6 +8,9 @@ export class OrderEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('uuid')
+  customerId: string;
+
   @Column('int')
   price: number;
 
