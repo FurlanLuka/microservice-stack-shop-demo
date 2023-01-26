@@ -1,9 +1,8 @@
 # Microservice stack demo project
 
-### [https://docs.microservice-stack.com/introduction/](Microservice stack documentation)
+### [Microservice stack documentation](https://docs.microservice-stack.com/introduction/)
 
-### [https://docs.microservice-stack.com/introduction/demo-project/project-overview](Demo project documentation)
-
+### [Demo project documentation](https://docs.microservice-stack.com/introduction/demo-project/project-overview)
 
 
 ### How to use?
