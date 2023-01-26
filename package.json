@@ -2,15 +2,26 @@
   "name": "microservice-stack-shop-demo",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-  },
+  "scripts": {},
   "private": true,
-  "dependencies": {
-  },
   "devDependencies": {
-    "nx": "15.6.2",
+    "@microservice-stack/workspace": "^0.1.47",
     "@nrwl/workspace": "15.6.2",
-    "typescript": "~4.8.2",
-    "prettier": "^2.6.2"
+    "nx": "15.6.2",
+    "prettier": "^2.6.2",
+    "typescript": "~4.8.2"
+  },
+  "dependencies": {
+    "@microservice-stack/nest-application": "0.1.46",
+    "@microservice-stack/nest-config": "0.1.46",
+    "@microservice-stack/nest-health": "0.1.46",
+    "@microservice-stack/nest-rabbitmq": "0.1.46",
+    "@microservice-stack/nest-redis": "0.1.46",
+    "@microservice-stack/nest-typeorm-migrations": "0.1.46",
+    "@nestjs/typeorm": "9.0.1",
+    "class-transformer": "0.5.1",
+    "class-validator": "0.14.0",
+    "pg": "8.8.0",
+    "typeorm": "0.3.11"
   }
 }
