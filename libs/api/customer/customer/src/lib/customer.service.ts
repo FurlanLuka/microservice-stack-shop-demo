@@ -6,7 +6,7 @@ import {
 import {
   CreateCustomerDto,
   AuthenticateCustomerDto,
-  CustomerTokenData,
+  TokenData,
   GetCustomerResponse,
 } from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -29,6 +29,7 @@ import {
   OrderShipmentFailedEventPayload,
   OrderShipmentSucceededEventPayload,
 } from '@microservice-stack-shop-demo/api/shipping/data-transfer-objects';
+import { TokenService } from '@microservice-stack-shop-demo/api/customer/token';
 
 @Injectable()
 export class CustomerService {
@@ -41,9 +42,7 @@ export class CustomerService {
     private rabbitmqService: RabbitmqService
   ) {}
 
-  public async createCustomer(
-    body: CreateCustomerDto
-  ): Promise<CustomerTokenData> {
+  public async createCustomer(body: CreateCustomerDto): Promise<TokenData> {
     const existingCustomer: CustomerEntity | null =
       await this.customerRepository.findOneBy({
         username: body.username,
@@ -67,7 +66,7 @@ export class CustomerService {
 
   public async authenticateCustomer(
     body: AuthenticateCustomerDto
-  ): Promise<CustomerTokenData> {
+  ): Promise<TokenData> {
     const customer: CustomerEntity | null =
       await this.customerRepository.findOneBy({
         username: body.username,

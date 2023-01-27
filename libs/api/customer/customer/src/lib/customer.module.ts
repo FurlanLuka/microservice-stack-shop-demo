@@ -7,9 +7,13 @@ import {
 import { CustomerEntity } from './customer.entity';
 import { CustomerService } from './customer.service';
 import { ReservedCreditsEntity } from './reserved-credits.entity';
+import { TokenModule } from '@microservice-stack-shop-demo/api/customer/token';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CustomerEntity, ReservedCreditsEntity])],
+  imports: [
+    TypeOrmModule.forFeature([CustomerEntity, ReservedCreditsEntity]),
+    TokenModule,
+  ],
   controllers: [CustomerController, CustomerQueueController],
   providers: [CustomerService],
 })
