@@ -6,16 +6,15 @@ import {
 import {
   CreateCustomerDto,
   AuthenticateCustomerDto,
-  CustomerTokenData,
+  TokenData,
   GetCustomerResponse,
+  RefreshCustomerTokenDto,
 } from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomerEntity } from './customer.entity';
 import { Repository } from 'typeorm';
-import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@microservice-stack/nest-config';
 import {
-  ConfigVariables,
   ORDER_PAYMENT_RESERVED_EVENT,
   ORDER_PAYMENT_FAILED_EVENT,
 } from '@microservice-stack-shop-demo/api/customer/constants';
@@ -29,6 +28,7 @@ import {
   OrderShipmentFailedEventPayload,
   OrderShipmentSucceededEventPayload,
 } from '@microservice-stack-shop-demo/api/shipping/data-transfer-objects';
+import { TokenService } from '@microservice-stack-shop-demo/api/customer/token';
 
 @Injectable()
 export class CustomerService {
@@ -38,12 +38,11 @@ export class CustomerService {
     @InjectRepository(ReservedCreditsEntity)
     private reservedCreditsRepository: Repository<ReservedCreditsEntity>,
     private configService: ConfigService,
-    private rabbitmqService: RabbitmqService
+    private rabbitmqService: RabbitmqService,
+    private tokenService: TokenService
   ) {}
 
-  public async createCustomer(
-    body: CreateCustomerDto
-  ): Promise<CustomerTokenData> {
+  public async createCustomer(body: CreateCustomerDto): Promise<TokenData> {
     const existingCustomer: CustomerEntity | null =
       await this.customerRepository.findOneBy({
         username: body.username,
@@ -62,12 +61,12 @@ export class CustomerService {
      */
     const customer = await this.customerRepository.save(body);
 
-    return this.createAccessToken(customer.username, customer.id);
+    return this.tokenService.createAccessToken(customer.username, customer.id);
   }
 
   public async authenticateCustomer(
     body: AuthenticateCustomerDto
-  ): Promise<CustomerTokenData> {
+  ): Promise<TokenData> {
     const customer: CustomerEntity | null =
       await this.customerRepository.findOneBy({
         username: body.username,
@@ -80,31 +79,13 @@ export class CustomerService {
       );
     }
 
-    return this.createAccessToken(customer.username, customer.id);
+    return this.tokenService.createAccessToken(customer.username, customer.id);
   }
 
-  private createAccessToken(
-    username: string,
-    customerId: string
-  ): CustomerTokenData {
-    const expiresIn = 3600 * 2;
-
-    const accessToken: string = sign(
-      {
-        username,
-      },
-      this.configService.get(ConfigVariables.AUTHENTICATION_SECRET),
-      {
-        algorithm: 'HS256',
-        expiresIn,
-        subject: customerId,
-      }
-    );
-
-    return {
-      accessToken,
-      expiry: Math.floor(Date.now() / 1000) + expiresIn,
-    };
+  public async refreshCustomerToken(
+    body: RefreshCustomerTokenDto
+  ): Promise<TokenData> {
+    return this.tokenService.refreshAccessToken(body.refreshToken);
   }
 
   public async getCustomer(customerId: string): Promise<GetCustomerResponse> {

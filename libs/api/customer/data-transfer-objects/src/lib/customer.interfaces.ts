@@ -1,8 +1,3 @@
-export interface CustomerTokenData {
-  accessToken: string;
-  expiry: number;
-}
-
 export interface GetCustomerResponse {
   username: string;
   creditAmount: number;

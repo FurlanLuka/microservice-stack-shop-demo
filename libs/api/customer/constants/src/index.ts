@@ -8,9 +8,14 @@ export const SERVICE_NAME = 'customer';
 
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
+export enum RedisConnection {
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
+}
+
 export enum ConfigVariables {
   AUTHENTICATION_SECRET = 'AUTHENTICATION_SECRET',
   QUEUE_URL = 'QUEUE_URL',
+  REDIS_URL = 'REDIS_URL',
   TYPEORM_HOST = 'TYPEORM_HOST',
   TYPEORM_USERNAME = 'TYPEORM_USERNAME',
   TYPEORM_PASSWORD = 'TYPEORM_PASSWORD',

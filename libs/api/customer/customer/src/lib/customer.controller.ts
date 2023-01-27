@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import {
   CreateCustomerDto,
-  CustomerTokenData,
+  TokenData,
   GetCustomerResponse,
+  RefreshCustomerTokenDto,
 } from '@microservice-stack-shop-demo/api/customer/data-transfer-objects';
 import { CustomerService } from './customer.service';
 import { UseGuards } from '@nestjs/common';
@@ -30,15 +31,22 @@ export class CustomerController {
   @Post()
   public async createCustomer(
     @Body() body: CreateCustomerDto
-  ): Promise<CustomerTokenData> {
+  ): Promise<TokenData> {
     return this.customerService.createCustomer(body);
   }
 
-  @Post('authenticate')
+  @Post('token')
   public async authenticateCustomer(
     @Body() body: CreateCustomerDto
-  ): Promise<CustomerTokenData> {
+  ): Promise<TokenData> {
     return this.customerService.authenticateCustomer(body);
+  }
+
+  @Post('token/refresh')
+  public async refreshCustomerToken(
+    @Body() body: RefreshCustomerTokenDto
+  ): Promise<TokenData> {
+    return this.customerService.refreshCustomerToken(body);
   }
 
   @Get('me')

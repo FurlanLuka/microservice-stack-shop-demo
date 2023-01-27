@@ -22,3 +22,8 @@ export class AuthenticateCustomerDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class RefreshCustomerTokenDto {
+  @IsString()
+  refreshToken: string;
+}
