@@ -25,7 +25,7 @@ export class TokenService {
       {
         username,
       },
-      this.configService.get(ConfigVariables.REDIS_URL),
+      this.configService.get(ConfigVariables.AUTHENTICATION_SECRET),
       {
         algorithm: 'HS256',
         expiresIn,
@@ -33,8 +33,11 @@ export class TokenService {
       }
     );
 
+    const refreshToken = this.createRefreshToken(username, customerId);
+
     return {
       accessToken,
+      refreshToken,
       expiry: Math.floor(Date.now() / 1000) + expiresIn,
     };
   }
@@ -45,8 +48,9 @@ export class TokenService {
     this.redisService
       .forConnection(RedisConnection.REFRESH_TOKEN)
       .getClient()
-      .set(
+      .setex(
         `${TokenService.REFRESH_TOKEN_KEY_PREFIX}${refreshToken}`,
+        3600 * 24 * 7, // 7 days
         JSON.stringify({
           customerId,
           username,
@@ -60,7 +64,7 @@ export class TokenService {
     const customerData = await this.redisService
       .forConnection(RedisConnection.REFRESH_TOKEN)
       .getClient()
-      .get(`${TokenService.REFRESH_TOKEN_KEY_PREFIX}${refreshToken}`);
+      .getdel(`${TokenService.REFRESH_TOKEN_KEY_PREFIX}${refreshToken}`);
 
     if (customerData === null) {
       throw new BadRequestException('Invalid refresh token');
