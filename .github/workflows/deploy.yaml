@@ -83,7 +83,7 @@ jobs:
   deploy:
     if: ${{ needs.setup_and_check.outputs.affectedProjects != '[]' && needs.setup_and_check.outputs.affectedProjects != '' }}
     name: Deploy ${{ matrix.project }}
-    needs: [build_and_publish, setup_and_check]
+    needs: [build_and_publish, setup_and_check, extract_metadata]
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -100,10 +100,10 @@ jobs:
         with:
           app-name: ${{ matrix.project }}
           deployment-chart: ./infrastructure/charts/node_service
-          app-values-directory: ./apps/api/${{ matrix.project }}/deployment-values.yaml
+          app-values: ./apps/api/${{ matrix.project }}/deployment-values.yaml
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           ecr-repository: ${{ secrets.AWS_ECR_REPOSITORY }}
           kube-config-data: ${{ secrets.KUBE_CONFIG_DATA }}
-          image-tag: ${{ needs.setup_and_check.outputs.imageTag }}
+          image-tag: ${{ needs.extract_metadata.outputs.imageTag }}
