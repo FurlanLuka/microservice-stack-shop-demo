@@ -51,6 +51,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           ecr-repository: ${{ secrets.AWS_ECR_REPOSITORY }}
+          dockerfile: ./infrastructure/Dockerfile.prebuild
   build_and_publish:
     if: ${{ needs.setup_and_check.outputs.affectedProjects != '[]' && needs.setup_and_check.outputs.affectedProjects != '' }}
     needs: [extract_metadata, setup_and_check, prebuild]
