@@ -73,7 +73,6 @@ jobs:
         name: Build and publish docker image
         with:
           app-name: ${{ matrix.project }}
-          cluster-name: ${{ secrets.CLUSTER_NAME }}
           app-dockerfile: ./apps/api/${{ matrix.project }}/Dockerfile.ci
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -102,6 +101,7 @@ jobs:
           app-name: ${{ matrix.project }}
           deployment-chart: ./infrastructure/charts/node_service
           app-values: ./apps/api/${{ matrix.project }}/deployment-values.yaml
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
