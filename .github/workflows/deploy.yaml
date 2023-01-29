@@ -99,7 +99,7 @@ jobs:
         name: Deploy API
         with:
           app-name: ${{ matrix.project }}
-          deployment-chart: ./infrastructure/charts/node_service
+          deployment-chart: ./infrastructure/charts/node-service
           app-values: ./apps/api/${{ matrix.project }}/deployment-values.yaml
           cluster-name: ${{ secrets.CLUSTER_NAME }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
