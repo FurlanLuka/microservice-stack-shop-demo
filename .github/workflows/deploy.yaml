@@ -73,7 +73,7 @@ jobs:
         name: Build and publish docker image
         with:
           app-name: ${{ matrix.project }}
-          cluster-name: demo
+          cluster-name: ${{ secrets.CLUSTER_NAME }}
           app-dockerfile: ./apps/api/${{ matrix.project }}/Dockerfile.ci
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
