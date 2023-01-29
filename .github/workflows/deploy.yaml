@@ -19,6 +19,8 @@ jobs:
           export TAG=${GITHUB_REF#refs/tags/}
           echo "IMAGE_TAG=${TAG#v}" >> $GITHUB_OUTPUT
   setup_and_check:
+    outputs:
+      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,6 +36,7 @@ jobs:
       - run: npx nx affected --target=build --parallel=3 --base=origin/${{ env.BASE_BRANCH_NAME }}
       - uses: FurlanLuka/microservice-stack/.github/actions/affected-projects@main
         name: Extract affected projects
+        id: affected-projects
         with:
           base: origin/${{ env.BASE_BRANCH_NAME }}
   prebuild:
