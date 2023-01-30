@@ -15,6 +15,12 @@ provider "aws" {
   region     = var.region
   secret_key = var.secret_key
   access_key = var.access_key
+
+  default_tags {
+    tags = {
+      Manager = "MicroserviceStack"
+    }
+  }
 }
 
 module "certificate_manager" {
@@ -45,6 +51,14 @@ module "eks" {
 
   vpc_id = module.vpc.vpc_id
   vpc_private_subnets = module.vpc.private_subnets
+
+  aws_auth_users = [
+    {
+      userarn  = module.iam.github_actions_user_arn
+      username = module.iam.github_actions_user_name
+      groups   = ["system:masters"]
+    },
+  ]
 }
 
 module "iam" {
@@ -67,19 +81,21 @@ module "helm" {
   environment_name = var.environment_name
 }
 
-# module "rds" {
-#   source = "./modules/rds"
+module "rds" {
+  source = "./modules/rds"
 
-#   name = var.environment_name
+  name = var.environment_name
 
-#   db_name  = "default_db"
-#   username = "default_user"
+  db_name  = "default_db"
+  username = "default_user"
 
-#   vpc_id                    = module.vpc.vpc_id
-#   vpc_private_subnets       = module.vpc.private_subnets
-#   vpc_database_subnet_group = module.vpc.database_subnet_group
-#   vpc_cidr_block            = module.vpc.vpc_cidr_block
-# }
+  vpc_id                    = module.vpc.vpc_id
+  vpc_private_subnets       = module.vpc.private_subnets
+  vpc_database_subnet_group = module.vpc.database_subnet_group
+  vpc_cidr_block            = module.vpc.vpc_cidr_block
+
+  output_secrets = var.output_secrets
+}
 
 module "records" {
   count = var.load_balancer_url != "" ? 1 : 0

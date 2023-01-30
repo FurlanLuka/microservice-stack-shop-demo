@@ -11,6 +11,8 @@ module "eks" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access = true
 
+  manage_aws_auth_configmap = true
+
   enable_irsa = true
 
   cluster_addons = {
@@ -35,7 +37,19 @@ module "eks" {
 
       instance_types = ["t3.large"]
       capacity_type  = "ON_DEMAND"
+
+      create_iam_role = true
+
+      iam_role_additional_policies = {
+        AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+      }
     }
+  }
+
+  aws_auth_users = var.aws_auth_users
+
+  iam_role_additional_policies = {
+    AmazonEC2ContainerRegistryReadOnly = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   }
 }
 

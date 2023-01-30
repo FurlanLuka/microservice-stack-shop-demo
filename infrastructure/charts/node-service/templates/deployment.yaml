@@ -44,8 +44,12 @@ spec:
               cpu: '{{ .Values.resources.request.cpu }}'
             limits:
               memory: '{{ .Values.resources.limits.memory }}'
+          {{- if .Values.secrets.enabled }}
+          env: {{ .Values.secrets.env }}
+          {{- end }}
       imagePullSecrets:
         - name: regcred
+      
 ---
 apiVersion: v1
 kind: Service

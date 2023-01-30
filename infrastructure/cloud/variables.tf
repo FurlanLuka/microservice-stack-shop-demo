@@ -1,5 +1,5 @@
 variable "environment_name" {
-  default = "demo"
+  default = "cloud-demo"
 }
 
 variable "domain" {
