@@ -5,7 +5,7 @@ WORKDIR /service
 
 COPY dist/apps/api/shipping/ /service/
 
-USER node
+USER root
 
 WORKDIR /
 
