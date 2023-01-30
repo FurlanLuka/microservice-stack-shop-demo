@@ -5,6 +5,7 @@
   "scripts": {},
   "private": true,
   "devDependencies": {
+    "@actions/core": "^1.10.0",
     "@microservice-stack/workspace": "^0.1.47",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",

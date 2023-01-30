@@ -5,7 +5,7 @@ WORKDIR /service
 
 COPY dist/apps/api/order/ /service/
 
-USER node
+USER root
 
 WORKDIR /
 

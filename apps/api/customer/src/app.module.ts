@@ -58,6 +58,6 @@ import { AuthenticationModule } from '@microservice-stack-shop-demo/api/utils/au
     CustomerModule,
   ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}
