@@ -86,7 +86,7 @@ resource "helm_release" "ingress_controller" {
 
   set {
     name = "productionConfig.domain"
-    value = var.domain
+    value = "api.${ var.domain }"
   }
 
   set {

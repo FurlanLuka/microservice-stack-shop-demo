@@ -3,11 +3,11 @@ variable "environment_name" {
 }
 
 variable "domain" {
-  default = "cloud.microservice-stack.com"
+  default = ""
 }
 
 variable "zone_id" {
-  default = "Z0524984X82EET1H7DYL"
+  default = ""
 }
 
 variable "output_secrets" {
