@@ -9,42 +9,42 @@ secrets:
   env:
     - name: AUTHENTICATION_SECRET
       valueFrom:
-      secretKeyRef:
-        name: auth
-        key: authentication-secret
+        secretKeyRef:
+          name: auth
+          key: authentication-secret
     - name: QUEUE_URL
       valueFrom:
-      secretKeyRef:
-        name: queue
-        key: url
+        secretKeyRef:
+          name: queue
+          key: url
     - name: REDIS_URL
       valueFrom:
-      secretKeyRef:
-        name: redis
-        key: url
+        secretKeyRef:
+          name: redis
+          key: url
     - name: TYPEORM_DATABASE
       valueFrom:  
-      secretKeyRef:
-        name: database
-        key: database
+        secretKeyRef:
+          name: database
+          key: database
     - name: TYPEORM_HOST
       valueFrom:
-      secretKeyRef:
-        name: database
-        key: hostname
+        secretKeyRef:
+          name: database
+          key: hostname
     - name: TYPEORM_PASSWORD
       valueFrom:
-      secretKeyRef:
-        name: database
-        key: password
+        secretKeyRef:
+          name: database
+          key: password
     - name: TYPEORM_PORT
       valueFrom:
-      secretKeyRef:
-        name: database
-        key: port
+        secretKeyRef:
+          name: database
+          key: port
     - name: TYPEORM_USERNAME
       valueFrom:
-      secretKeyRef:
-        name: database
-        key: username
+        secretKeyRef:
+          name: database
+          key: username
 

@@ -45,7 +45,10 @@ spec:
             limits:
               memory: '{{ .Values.resources.limits.memory }}'
           {{- if .Values.secrets.enabled }}
-          env: {{ .Values.secrets.env }}
+          env:
+            {{- range $secret := .Values.secrets.env }}
+            - {{- $secret | toYaml | nindent 14 }}
+            {{- end }}
           {{- end }}
       imagePullSecrets:
         - name: regcred
